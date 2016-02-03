@@ -1,95 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="@drawable/border_shadow"
+        android:background="@drawable/layout_bg"
+        android:layout_weight="1"
+        android:padding="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/names"
                 android:hint="@string/names"
+                android:textColorHint="@color/hintColor"
+                android:background="@drawable/edittext_top_bg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/cost"
                 android:inputType="numberDecimal"
                 android:singleLine="true"
+                android:background="@drawable/edittext_default_bg"
+                android:textColorHint="@color/hintColor"
                 android:hint="@string/cost"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <EditText
                 android:id="@+id/description"
                 android:hint="@string/description"
+                android:background="@drawable/edittext_bot_bg"
+                android:textColorHint="@color/hintColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </android.support.design.widget.TextInputLayout>
-
     </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
-            <TextView
-                android:text="Split with"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:id="@+id/num_of_people"
-                android:hint="#"
-                android:inputType="number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:text="other people"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <EditText
-                android:id="@+id/split_type"
-                android:hint="Equally"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></ListView>
-        <TextView
-            android:text="List of people will go here."
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="50dp" />
-    </LinearLayout>
-
-
 
 </LinearLayout>

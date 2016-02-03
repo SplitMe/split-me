@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="split_array">
+        <item>Equally</item>
+        <item>Percentage</item>
+        <item>Unequally</item>
+    </string-array>
+</resources>
