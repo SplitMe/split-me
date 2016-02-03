@@ -35,7 +35,7 @@ public class RegistrationActivity extends Activity
         setContentView(R.layout.registration_screen);
         ButterKnife.bind(this);
         String appVer = "v1";
-        Backendless.initApp(this, "@string/backendless_app_id", "@string/backendless_api_key", appVer);
+        Backendless.initApp(this, getResources().getString(R.string.backendless_app_id), getResources().getString(R.string.backendless_app_key), appVer);
 
         regBtn.setOnClickListener(new View.OnClickListener()
         {

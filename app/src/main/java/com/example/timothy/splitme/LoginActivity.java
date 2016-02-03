@@ -3,7 +3,6 @@ package com.example.timothy.splitme;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +40,7 @@ public class LoginActivity extends Activity
         ButterKnife.bind(this);
 
         String appVer = "v1";
-        Backendless.initApp(this, "@string/backendless_app_id", "@string/backendless_api_key", appVer);
+        Backendless.initApp(this, getResources().getString(R.string.backendless_app_id), getResources().getString(R.string.backendless_app_key), appVer);
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override

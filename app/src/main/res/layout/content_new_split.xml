@@ -7,7 +7,6 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:background="@drawable/layout_bg"
         android:layout_weight="1"
         android:padding="15dp"
         android:layout_width="match_parent"
@@ -25,6 +24,7 @@
             <EditText
                 android:id="@+id/cost"
                 android:inputType="numberDecimal"
+                android:drawableLeft="@drawable/ic_attach_money_black_24dp"
                 android:singleLine="true"
                 android:background="@drawable/edittext_default_bg"
                 android:textColorHint="@color/hintColor"
@@ -41,5 +41,6 @@
                 android:layout_height="wrap_content" />
 
     </LinearLayout>
+
 
 </LinearLayout>
