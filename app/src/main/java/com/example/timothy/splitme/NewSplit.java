@@ -1,34 +1,50 @@
 package com.example.timothy.splitme;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Spinner;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class NewSplit extends AppCompatActivity
 {
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    //@Bind(R.id.calendar_view)MaterialCalendarView calendarView;
+    @Bind(R.id.date_split)EditText date;
+    protected SimpleDateFormat dFormat;
+    protected String currentDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_split);
+        ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        String format = "MMMM dd,yyyy";
+        Calendar calendar = Calendar.getInstance();
+
+        dFormat = new SimpleDateFormat(format, Locale.getDefault());
+        currentDate = dFormat.format(calendar.getTime());
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("New Split");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        date.setText(currentDate);
 
     }
 

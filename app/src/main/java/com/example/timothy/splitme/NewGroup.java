@@ -37,11 +37,6 @@ public class NewGroup extends AppCompatActivity
 
     public void addMember()
     {
-        LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        TextView tv=new TextView(NewGroup.this);
-        tv.setLayoutParams(lparams);
-        tv.setHint("Group member");
-        
+
     }
 }

@@ -12,33 +12,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/names"
-                android:hint="@string/names"
-                android:textColorHint="@color/hintColor"
-                android:background="@drawable/edittext_top_bg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/names"
+            android:hint="@string/names"
+            android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+            android:textColorHint="@color/hintColor"
+            android:background="@drawable/edittext_top_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/cost"
+            android:inputType="numberDecimal"
+            android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+            android:singleLine="true"
+            android:background="@drawable/edittext_default_bg"
+            android:textColorHint="@color/hintColor"
+            android:hint="@string/cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/description"
+            android:hint="@string/description"
+            android:drawableLeft="@drawable/ic_weekend_black_24dp"
+            android:background="@drawable/edittext_bot_bg"
+            android:textColorHint="@color/hintColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <View style="@style/Divider"
+            android:layout_marginTop="10dp"/>
+        <EditText
+            android:background="@drawable/edittext_default_bg"
+            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+            android:id="@+id/date_split"
+            android:editable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-
-            <EditText
-                android:id="@+id/cost"
-                android:inputType="numberDecimal"
-                android:drawableLeft="@drawable/ic_attach_money_black_24dp"
-                android:singleLine="true"
-                android:background="@drawable/edittext_default_bg"
-                android:textColorHint="@color/hintColor"
-                android:hint="@string/cost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/description"
-                android:hint="@string/description"
-                android:background="@drawable/edittext_bot_bg"
-                android:textColorHint="@color/hintColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
     </LinearLayout>
 
