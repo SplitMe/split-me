@@ -20,16 +20,26 @@
             android:background="@drawable/edittext_top_bg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/cost"
-            android:inputType="numberDecimal"
-            android:drawableLeft="@drawable/ic_attach_money_black_24dp"
-            android:singleLine="true"
-            android:background="@drawable/edittext_default_bg"
-            android:textColorHint="@color/hintColor"
-            android:hint="@string/cost"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/cost"
+                android:inputType="numberDecimal"
+                android:textSize = "20sp"
+                android:drawableLeft="@drawable/ic_attach_money_black_24dp"
+                android:singleLine="true"
+                android:background="@drawable/edittext_default_bg"
+                android:textColorHint="@color/hintColor"
+                android:hint="@string/cost"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        
         <EditText
             android:id="@+id/description"
             android:hint="@string/description"

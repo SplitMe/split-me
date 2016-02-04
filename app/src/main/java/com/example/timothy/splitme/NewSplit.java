@@ -4,28 +4,36 @@ import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class NewSplit extends AppCompatActivity
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+import com.wdullaer.materialdatetimepicker.Utils;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+
+
+public class NewSplit extends AppCompatActivity implements DatePickerDialog.OnDateSetListener
 {
     @Bind(R.id.toolbar) Toolbar toolbar;
-    //@Bind(R.id.calendar_view)MaterialCalendarView calendarView;
     @Bind(R.id.date_split)EditText date;
     protected SimpleDateFormat dFormat;
     protected String currentDate;
+    protected final Calendar calendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,8 +42,7 @@ public class NewSplit extends AppCompatActivity
         setContentView(R.layout.activity_new_split);
         ButterKnife.bind(this);
 
-        String format = "MMMM dd,yyyy";
-        Calendar calendar = Calendar.getInstance();
+        String format = "MM/dd/yyyy";
 
         dFormat = new SimpleDateFormat(format, Locale.getDefault());
         currentDate = dFormat.format(calendar.getTime());
@@ -43,9 +50,16 @@ public class NewSplit extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("New Split");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         date.setText(currentDate);
-
+        date.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                DatePickerDialog dpb = DatePickerDialog.newInstance(NewSplit.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                dpb.show(getFragmentManager(), "DatePickerDialog");
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu)
@@ -67,5 +81,20 @@ public class NewSplit extends AppCompatActivity
         if (id == R.id.confirm) return true;
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth)
+    {
+        String test = monthOfYear+1 + "/" + dayOfMonth + "/" + year;
+        try
+        {
+            currentDate = dFormat.format(dFormat.parse(test));
+        }
+        catch (ParseException ex)
+        {
+            Toast.makeText(NewSplit.this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        date.setText(currentDate.toString());
     }
 }
