@@ -1,5 +1,6 @@
-package com.example.timothy.splitme;
+package com.example.timothy.splitup;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,6 @@ public class Group
     private ArrayList<String> people;
     private String groupName;
 
-
     public Group()
     {
         people = new ArrayList<String>();
@@ -19,6 +19,11 @@ public class Group
     public void add(String person)
     {
         people.add(person);
+    }
+    public ArrayList<String> getMembers(){return people; }
+    public void setGroupName(String s)
+    {
+        groupName = s;
     }
     public void remove(String person)
     {

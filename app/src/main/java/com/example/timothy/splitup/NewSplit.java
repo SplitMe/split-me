@@ -1,36 +1,41 @@
-package com.example.timothy.splitme;
+package com.example.timothy.splitup;
 
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import com.wdullaer.materialdatetimepicker.Utils;
+import com.blackcat.currencyedittext.CurrencyEditText;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
 
 
 public class NewSplit extends AppCompatActivity implements DatePickerDialog.OnDateSetListener
 {
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.date_split)EditText date;
+    @Bind(R.id.names)MultiAutoCompleteTextView paid;
+    @Bind(R.id.cost)CurrencyEditText cost;
+
+    @Bind(R.id.paid_for)RecyclerView paidFor;
+    protected PaidAdapter adapter;
+    protected LinearLayoutManager lManager;
+
     protected SimpleDateFormat dFormat;
     protected String currentDate;
     protected final Calendar calendar = Calendar.getInstance();
@@ -50,17 +55,19 @@ public class NewSplit extends AppCompatActivity implements DatePickerDialog.OnDa
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("New Split");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         date.setText(currentDate);
-        date.setOnClickListener(new View.OnClickListener()
-        {
+        date.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 DatePickerDialog dpb = DatePickerDialog.newInstance(NewSplit.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 dpb.show(getFragmentManager(), "DatePickerDialog");
             }
         });
-    }
+        lManager = new LinearLayoutManager(this);
+
+
+}
 
     public boolean onCreateOptionsMenu(Menu menu)
     {

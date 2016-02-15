@@ -1,4 +1,4 @@
-package com.example.timothy.splitme;
+package com.example.timothy.splitup;
 
 import org.junit.Test;
 

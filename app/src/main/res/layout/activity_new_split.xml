@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.timothy.splitme.NewSplit">
+    tools:context="com.example.timothy.splitup.NewSplit">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

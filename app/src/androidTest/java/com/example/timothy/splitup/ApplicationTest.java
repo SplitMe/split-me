@@ -1,4 +1,4 @@
-package com.example.timothy.splitme;
+package com.example.timothy.splitup;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

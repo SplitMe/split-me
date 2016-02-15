@@ -1,24 +1,19 @@
-package com.example.timothy.splitme;
+package com.example.timothy.splitup;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.content.Intent;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.backendless.Backendless;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
-import com.facebook.appevents.AppEventsLogger;
 
 
 public class MainActivity extends AppCompatActivity
@@ -67,22 +62,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) return true;
+        if (id == R.id.groups)
+        {
+            Intent group = new Intent(MainActivity.this, NewGroup.class);
+            startActivity(group);
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
-    /*
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        AppEventsLogger.activateApp(this);
-    }
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        AppEventsLogger.deactivateApp(this);
-    }
-    */
+
 }
