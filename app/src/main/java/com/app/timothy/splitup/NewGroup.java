@@ -1,15 +1,9 @@
-package com.example.timothy.splitup;
+package com.app.timothy.splitup;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.net.Uri;
@@ -23,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsoluteLayout;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;

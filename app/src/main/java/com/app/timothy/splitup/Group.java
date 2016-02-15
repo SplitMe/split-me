@@ -1,6 +1,5 @@
-package com.example.timothy.splitup;
+package com.app.timothy.splitup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

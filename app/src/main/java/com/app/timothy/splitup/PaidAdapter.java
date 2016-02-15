@@ -1,4 +1,4 @@
-package com.example.timothy.splitup;
+package com.app.timothy.splitup;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

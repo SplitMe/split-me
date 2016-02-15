@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.timothy.splitup.NewGroup">
+    tools:context="com.app.timothy.splitup.NewGroup">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

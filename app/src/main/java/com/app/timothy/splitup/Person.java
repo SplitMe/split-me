@@ -1,4 +1,4 @@
-package com.example.timothy.splitup;
+package com.app.timothy.splitup;
 
 /**
  * Created by Timothy on 2/14/2016.

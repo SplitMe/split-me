@@ -1,4 +1,4 @@
-package com.example.timothy.splitup;
+package com.app.timothy.splitup;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
