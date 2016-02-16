@@ -2,6 +2,7 @@ package com.app.timothy.splitup;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -126,22 +127,9 @@ public class NewGroup extends AppCompatActivity
         {
             if(groupName.getText().length() > 0)
             {
-                String filename = "groups.txt";
-                String gName = groupName.getText().toString() + "\n";
-                FileOutputStream outputStream;
+                SharedPreferences sp = this.getSharedPreferences("group_sp", MODE_PRIVATE);
+                SharedPreferences.Editor edit = sp.edit();
 
-                try {
-                    outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                    outputStream.write(gName.getBytes());
-                    for(String s: group.getMembers())
-                    {
-                        outputStream.write((s+"\n").getBytes());
-                    }
-                    outputStream.write("\n".getBytes());
-                    outputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
             else
             {
