@@ -1,5 +1,6 @@
 package com.app.timothy.splitup;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.io.FileOutputStream;
@@ -38,6 +40,7 @@ public class NewGroup extends AppCompatActivity
 
     private final int RESULT = 2016;
     private ArrayList<TextView> membersText;
+    private TinyDB tinydb;
     private Group group;
 
     @Override
@@ -53,11 +56,12 @@ public class NewGroup extends AppCompatActivity
         group = new Group();
         membersText = new ArrayList<TextView>();
 
+        tinydb = new TinyDB(getApplicationContext());
 
         TextView tv = new TextView(getApplicationContext());
         tv.setText("Myself");
 
-        group.add(tv.toString());
+        group.add(new Person("Myself"));
 
         if (Build.VERSION.SDK_INT < 23)
             tv.setTextAppearance(getApplicationContext(), R.style.GroupMemberTextView);
@@ -65,7 +69,6 @@ public class NewGroup extends AppCompatActivity
             tv.setTextAppearance(R.style.GroupMemberTextView);
         membersText.add(tv);
         groupLayout.addView(tv);
-        group.add(tv.toString());
 
         addMembers.setOnClickListener(new View.OnClickListener()
         {
@@ -117,19 +120,29 @@ public class NewGroup extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.save)
         {
-            if(groupName.getText().length() > 0)
-            {
-                SharedPreferences sp = this.getSharedPreferences("group_sp", MODE_PRIVATE);
-                SharedPreferences.Editor edit = sp.edit();
-
+            if(groupName.getText().length() > 0) {
+                try
+                {
+                    ArrayList groups = tinydb.getListObject("groups", Group.class);
+                    groups.add(group);
+                    tinydb.putListObject("groups", groups);
+                    Toast.makeText(NewGroup.this, "Group created", Toast.LENGTH_SHORT).show();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    ArrayList groups = new ArrayList();
+                    groups.add(group);
+                    tinydb.putListObject("groups", groups);
+                    Toast.makeText(NewGroup.this, "Group created", Toast.LENGTH_SHORT).show();
+                }
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK,returnIntent);
+                this.finish();
             }
             else
             {
@@ -164,9 +177,25 @@ public class NewGroup extends AppCompatActivity
                 tv.setTextAppearance(R.style.GroupMemberTextView);
 
             //tv.setCompoundDrawablesWithIntrinsicBounds();
-            membersText.add(tv);
-            groupLayout.addView(tv);
-            group.add(name);
+            Boolean isValid = true;
+            for(Person p:group.getMembers())
+            {
+                if(p.getName().equals(name.toString()))
+                {
+                    isValid = false;
+                }
+            }
+            if(isValid)
+            {
+                membersText.add(tv);
+                groupLayout.addView(tv);
+                group.add(new Person(name.toString()));
+            }
+            else
+            {
+                ContactExistsDialog ced = new ContactExistsDialog();
+                ced.show(getFragmentManager(), "ContactExists");
+            }
             cursor.close();
         }catch (Exception e)
         {

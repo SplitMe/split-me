@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 public class LoginActivity extends Activity
 {
     private static final int LOGIN_REQUEST = 0;
+    private TinyDB tinyDB;
     @Bind(R.id.sign_up_text) TextView signUp;
     @Bind(R.id.email) EditText email;
     @Bind(R.id.password) EditText password;
@@ -41,6 +42,7 @@ public class LoginActivity extends Activity
 
         String appVer = "v1";
         Backendless.initApp(this, getResources().getString(R.string.backendless_app_id), getResources().getString(R.string.backendless_app_key), appVer);
+        tinyDB = new TinyDB(getApplicationContext());
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +65,7 @@ public class LoginActivity extends Activity
             @Override
             public void onClick(View v)
             {
+                tinyDB.putBoolean("Logged in", true);
                 finish();
             }
         });
@@ -102,7 +105,9 @@ public class LoginActivity extends Activity
         Backendless.UserService.login(user.getEmail(), user.getPassword(), new AsyncCallback<BackendlessUser>() {
 
             @Override
-            public void handleResponse(BackendlessUser registeredUser) {
+            public void handleResponse(BackendlessUser registeredUser)
+            {
+                tinyDB.putBoolean("Logged in", true);
                 finish();
             }
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillViewport="true"
     android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <LinearLayout
         android:orientation="vertical"
@@ -12,8 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <MultiAutoCompleteTextView
-            android:id="@+id/names"
+        <EditText
+            android:id="@+id/split_group"
+            style="@style/EditTextDef"
+            android:hint="Group"
+            android:editable="false"
+            android:focusable="false"
+            android:background="?attr/selectableItemBackground"
+            android:drawableLeft="@drawable/ic_group_black_24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/payer"
+            android:editable="false"
+            android:focusable="false"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginTop="10dp"
             android:hint="Who paid?"
             android:drawableLeft="@drawable/ic_account_circle_black_24dp"
             style="@style/EditTextDef"/>
@@ -26,6 +42,7 @@
             android:layout_height="wrap_content">
 
             <com.blackcat.currencyedittext.CurrencyEditText
+                android:text="$0.00"
                 android:id="@+id/cost"
                 android:singleLine="true"
                 android:layout_weight="1"
@@ -37,6 +54,7 @@
         <EditText
             android:id="@+id/description"
             android:hint="@string/description"
+            android:inputType="textCapSentences"
             android:drawableLeft="@drawable/ic_weekend_black_24dp"
             style="@style/EditTextDef" />
         <View style="@style/Divider"
@@ -52,4 +70,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</ScrollView>

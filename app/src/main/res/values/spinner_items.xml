@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="split_types">
+        <item>Split equally</item>
+        <item>Split by amount</item>
+    </string-array>
+</resources>

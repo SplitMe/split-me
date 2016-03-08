@@ -9,20 +9,29 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:padding="10dp"
+            android:padding="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/group_member"
+            <TextView
+                android:id="@+id/debtor"
                 android:hint="Name"
-                android:layout_weight="5"
-                android:layout_width="wrap_content"
+                android:editable="false"
+                android:focusable="false"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
             <com.blackcat.currencyedittext.CurrencyEditText
                 android:id="@+id/share"
-                android:layout_weight="1"
+                android:editable="false"
+                android:text="$0.00"
+                android:focusable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <CheckBox
+                android:id="@+id/included"
+                android:focusable="false"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

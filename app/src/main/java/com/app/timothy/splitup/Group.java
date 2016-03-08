@@ -7,19 +7,33 @@ import java.util.ArrayList;
  */
 public class Group
 {
-    private ArrayList<String> people;
+    private ArrayList<Person> people;
     private String groupName;
+    private Split splits;
 
     public Group()
     {
-        people = new ArrayList<String>();
+        people = new ArrayList<Person>();
     }
 
-    public void add(String person)
+    public void add(Person person)
     {
         people.add(person);
     }
-    public ArrayList<String> getMembers(){return people; }
+    public ArrayList<Person> getMembers(){return people; }
+    public String toString()
+    {
+        String members = "";
+        for(Person p:people)
+        {
+            members += p.getName() + ",";
+        }
+        return members.substring(0, members.length()-1);
+    }
+    public Split getSplits()
+    {
+        return splits;
+    }
     public void setGroupName(String s)
     {
         groupName = s;
@@ -31,5 +45,9 @@ public class Group
     public String getGroupName()
     {
         return groupName;
+    }
+    public void addSplit(Split s)
+    {
+        splits = s;
     }
 }

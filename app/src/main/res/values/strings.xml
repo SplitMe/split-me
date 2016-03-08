@@ -7,4 +7,6 @@
     <string name="description">What was it for?</string>
     <string name="pay">Pay</string>
     <string name="reset_password">Forgot your password?</string>
+    <string name="already_contains">This person is already in the group.</string>
+    <string name="no_group">You have not selected a group yet!</string>
 </resources>
