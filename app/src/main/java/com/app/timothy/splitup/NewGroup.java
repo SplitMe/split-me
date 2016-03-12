@@ -25,8 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.local.UserTokenStorageFactory;
+
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +49,7 @@ public class NewGroup extends AppCompatActivity
     private ArrayList<TextView> membersText;
     private TinyDB tinydb;
     private Group group;
+    private BackendlessUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +60,8 @@ public class NewGroup extends AppCompatActivity
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("New Group");
+
+        user = Backendless.UserService.CurrentUser();
 
         group = new Group();
         membersText = new ArrayList<TextView>();
@@ -70,15 +80,14 @@ public class NewGroup extends AppCompatActivity
         membersText.add(tv);
         groupLayout.addView(tv);
 
-        addMembers.setOnClickListener(new View.OnClickListener()
-        {
+        addMembers.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                 startActivityForResult(contactPickerIntent, RESULT);
             }
         });
+
         groupName.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -124,25 +133,25 @@ public class NewGroup extends AppCompatActivity
 
         if (id == R.id.save)
         {
-            if(groupName.getText().length() > 0) {
-                try
-                {
-                    ArrayList groups = tinydb.getListObject("groups", Group.class);
-                    groups.add(group);
-                    tinydb.putListObject("groups", groups);
-                    Toast.makeText(NewGroup.this, "Group created", Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                    ArrayList groups = new ArrayList();
-                    groups.add(group);
-                    tinydb.putListObject("groups", groups);
-                    Toast.makeText(NewGroup.this, "Group created", Toast.LENGTH_SHORT).show();
-                }
+            if(groupName.getText().length() > 0)
+            {
+
+                group.saveAsync( new AsyncCallback<Group>() {
+                    @Override
+                    public void handleResponse(Group group) {
+                        Toast.makeText(NewGroup.this, "Success", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+
+                        Toast.makeText(NewGroup.this, backendlessFault.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_OK,returnIntent);
+                setResult(Activity.RESULT_OK, returnIntent);
                 this.finish();
+
             }
             else
             {

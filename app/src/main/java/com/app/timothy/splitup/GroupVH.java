@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.backendless.Backendless;
+
 import io.github.prashantsolanki3.snaplibrary.snap.SnapViewHolder;
 
 /**
@@ -23,6 +25,7 @@ public class GroupVH extends SnapViewHolder<Group>
     {
         super(itemView, context);
         this.context = context;
+
         initViews();
 
     }
@@ -31,7 +34,6 @@ public class GroupVH extends SnapViewHolder<Group>
         groupName = (TextView) itemView.findViewById(R.id.gv_group_name);
         members= (TextView) itemView.findViewById(R.id.gv_members);
         tinyDB = new TinyDB(getContext());
-
     }
 
     @Override
@@ -49,7 +51,7 @@ public class GroupVH extends SnapViewHolder<Group>
         snapViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tinyDB.putObject("Current group", gm);
+                tinyDB.putString("Current group", gm.getObjectId());
                 Toast.makeText(getContext(), "Selected " + gm.getGroupName(), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(context, GroupActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

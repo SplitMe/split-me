@@ -32,14 +32,15 @@ public class SplitsVH extends SnapViewHolder<Split>
     public void populateViewHolder(Split split, int i)
     {
         description.setText(split.getReason());
-        total.setText("$" + split.getCost());
-        costEach.setText("$" + split.getCostEach());
+        String tot = "$" + split.getCost(), ce = "$" + split.getCostEach() + "/each";
+        total.setText(tot);
+        costEach.setText(ce);
         String s = "";
-        for(Person p:split.getMembers())
-        {
+
+        for (Person p : split.getMembers()) {
             s += p.getName() + ",";
         }
-        s = s.substring(0, s.length()-1);
+        s = s.substring(0, s.length() - 1);
         members.setText(s);
     }
 

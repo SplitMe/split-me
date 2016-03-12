@@ -40,8 +40,6 @@ public class LoginActivity extends Activity
         setContentView(R.layout.login_screen);
         ButterKnife.bind(this);
 
-        String appVer = "v1";
-        Backendless.initApp(this, getResources().getString(R.string.backendless_app_id), getResources().getString(R.string.backendless_app_key), appVer);
         tinyDB = new TinyDB(getApplicationContext());
 
         signInBtn.setOnClickListener(new View.OnClickListener() {
@@ -94,21 +92,27 @@ public class LoginActivity extends Activity
         return isValid;
     }
 
+    public void finishUp()
+    {
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
+        this.finish();
+    }
+
     protected void loginUser()
     {
 
-        BackendlessUser user = new BackendlessUser();
+        SplitUpUser user = new SplitUpUser();
 
         user.setEmail(email.getText().toString());
         user.setPassword(password.getText().toString());
 
-        Backendless.UserService.login(user.getEmail(), user.getPassword(), new AsyncCallback<BackendlessUser>() {
+        Backendless.UserService.login(user.getEmail(), user.getPassword(), new DefaultCallback<BackendlessUser>(LoginActivity.this) {
 
-            @Override
-            public void handleResponse(BackendlessUser registeredUser)
+            public void handleResponse(BackendlessUser backendlessUser)
             {
-                tinyDB.putBoolean("Logged in", true);
-                finish();
+                super.handleResponse(backendlessUser);
+                finishUp();
             }
 
             @Override

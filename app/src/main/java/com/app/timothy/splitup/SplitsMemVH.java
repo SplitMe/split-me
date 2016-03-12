@@ -31,15 +31,18 @@ public class SplitsMemVH extends SnapViewHolder<Person>
         share = (CurrencyEditText) itemView.findViewById(R.id.share);
         share.setVisibility(View.INVISIBLE);
         included = (CheckBox) itemView.findViewById(R.id.included);
+        included.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void populateViewHolder(Person data, int pos)
     {
         name.setText(data.getName());
+        /*
         for(Debt d:data.getDebt()) {
             share.setText(String.valueOf(d.getAmount()));
-        }
+        }*/
+
     }
 
     @Override

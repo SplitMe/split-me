@@ -1,24 +1,31 @@
 package com.app.timothy.splitup;
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.os.Bundle;
-import android.provider.Contacts;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewPager;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.content.Intent;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.astuetz.PagerSlidingTabStrip;
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
+import com.backendless.persistence.local.UserIdStorageFactory;
+import com.backendless.persistence.local.UserTokenStorageFactory;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -26,21 +33,17 @@ import butterknife.ButterKnife;
 import io.github.prashantsolanki3.snaplibrary.snap.SnapAdapter;
 
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener
 {
     @Bind(R.id.toolbar)Toolbar toolbar;
-    /*
-    @Bind(R.id.viewpager)ViewPager viewPager;
-    @Bind(R.id.tabs)PagerSlidingTabStrip tabStrip;
-    @Bind(R.id.fab_pay)FloatingActionButton fab;
-    */
-    @Bind(R.id.found_text) TextView foundText;
     @Bind(R.id.groups_recycler) RecyclerView rv;
+    @Bind(R.id.group_refresh) SwipeRefreshLayout srl;
     SnapAdapter<Group, GroupVH> adapter;
     private int RESULT = 2016;
-    private TinyDB tinyDB;
 
-    private ArrayList usersGroups;
+    private ArrayList<Group> usersGroups;
+    private BackendlessUser user;
+    private TinyDB tinyDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,24 +52,27 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        String appID = getString(R.string.backendless_app_id);
+        String appKey = getString(R.string.backendless_app_key);
+        String appVer = getString(R.string.backendless_app_ver);
+
+        Backendless.initApp(getApplicationContext(), appID, appKey, appVer);
+
         tinyDB = new TinyDB(getApplicationContext());
 
         loginScreen();
 
         setSupportActionBar(toolbar);
-        /*
-        viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
 
-        tabStrip.setViewPager(viewPager);
-
-
-        */
         usersGroups = new ArrayList<Group>();
-
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        adapter = new SnapAdapter<Group, GroupVH>(getApplicationContext(), Group.class, R.layout.groupview_layout, GroupVH.class);
-        rv.setAdapter(adapter);
-        updateList();
+
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshContent();
+            }
+        });
 
     }
     @Override
@@ -77,49 +83,54 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void updateList()
+    public void refreshContent()
     {
-        try
-        {
-            usersGroups = tinyDB.getListObject("groups", Group.class);
-            foundText.setVisibility(View.INVISIBLE);
-            adapter.clear();
-            adapter.addAll(usersGroups);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            foundText.setVisibility(View.VISIBLE);
-        }
+        String whereClause = "ownerId = '" + Backendless.UserService.CurrentUser().getUserId() + "'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+        Group.findAsync(dataQuery, new BackendlessCallback<BackendlessCollection<Group>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Group> response) {
+                usersGroups.clear();
+                usersGroups.addAll(response.getData());
+                adapter = new SnapAdapter<Group, GroupVH>(getApplicationContext(), Group.class, R.layout.groupview_layout, GroupVH.class);
+                rv.setAdapter(adapter);
+                ItemTouchHelper.Callback callback = new GroupTouchHelper(adapter);
+                ItemTouchHelper helper = new ItemTouchHelper(callback);
+                helper.attachToRecyclerView(rv);
+                adapter.clear();
+                adapter.addAll(usersGroups);
+                if(srl.isRefreshing())
+                    srl.setRefreshing(false);
+            }
+        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.new_group)
         {
             Intent group = new Intent(MainActivity.this, NewGroup.class);
             startActivityForResult(group, RESULT);
             return true;
         }
-        else if(id == R.id.clear)
-        {
-            tinyDB.clear();
-            Toast.makeText(MainActivity.this, "Cleared data", Toast.LENGTH_SHORT).show();
-            updateList();
-            return true;
-        }
-
 
         else if(id == R.id.logout)
         {
-            tinyDB.putBoolean("Logged in", false);
-            loginScreen();
+            Backendless.UserService.logout(new AsyncCallback<Void>() {
+                @Override
+                public void handleResponse(Void response) {
+                    loginScreen();
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    Toast.makeText(MainActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -130,7 +141,7 @@ public class MainActivity extends AppCompatActivity
     {
         if(resCode == RESULT_OK)
         {
-            updateList();
+            refreshContent();
         }
         else
             Log.e("Group", "");
@@ -138,10 +149,39 @@ public class MainActivity extends AppCompatActivity
     }
     public void loginScreen()
     {
-        if(!tinyDB.getBoolean("Logged in") )
-        {
-            Intent login = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(login);
-        }
+        AsyncCallback<Boolean> isValidLoginCallBack = new AsyncCallback<Boolean>() {
+            @Override
+            public void handleResponse(Boolean response)
+            {
+                String userId = UserIdStorageFactory.instance().getStorage().get();
+                Backendless.UserService.findById(userId, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser response) {
+                        Backendless.UserService.setCurrentUser(response);
+                        refreshContent();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault fault) {
+                        Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivityForResult(login, 1);
+                    }
+                });
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(login, 1);
+            }
+        };
+        Backendless.UserService.isValidLogin(isValidLoginCallBack);
     }
+
+    @Override
+    public void onRefresh()
+    {
+        refreshContent();
+    }
+
 }

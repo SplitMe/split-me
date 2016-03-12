@@ -3,12 +3,22 @@ package com.app.timothy.splitup;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+
+import android.os.Handler;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,6 +34,7 @@ public class GroupActivity extends AppCompatActivity
     private TinyDB tinyDB;
     private Group current;
     private SnapAdapter<Split, SplitsVH> adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -32,50 +43,53 @@ public class GroupActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         tinyDB = new TinyDB(getApplicationContext());
-        current = (Group)tinyDB.getObject("Current group", Group.class);
 
-        toolbar.setTitle(current.getGroupName());
         setSupportActionBar(toolbar);
-
-        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         adapter = new SnapAdapter<Split, SplitsVH>(getApplicationContext(), Split.class, R.layout.debt_items, SplitsVH.class);
         rv.setAdapter(adapter);
-
+        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         updateList();
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(GroupActivity.this, NewSplit.class);
-                startActivityForResult(i, 2016);
+                startActivityForResult(i, 1);
             }
         });
     }
+
     public void updateList()
     {
-        try
-        {
-            adapter.clear();
-            adapter.add(current.getSplits());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        String objID = tinyDB.getString("Current group");
+
+        Group.findByIdAsync(objID, new AsyncCallback<Group>() {
+            @Override
+            public void handleResponse(Group response) {
+                current = response;
+                toolbar.setTitle(current.getGroupName());
+                ItemTouchHelper.Callback callback = new SplitTouchHelper(adapter);
+                ItemTouchHelper helper = new ItemTouchHelper(callback);
+                helper.attachToRecyclerView(rv);
+                adapter.clear();
+                adapter.addAll(current.getSplits());
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Toast.makeText(GroupActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
-                Split s = (Split)tinyDB.getObject("Ret split", Split.class);
-                current.addSplit(s);
-                updateList();
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
+        if(resultCode == Activity.RESULT_OK){
+            updateList();
         }
-    }//onActivityResult
+        if (resultCode == Activity.RESULT_CANCELED) {
+        }
+    }
+
 }
